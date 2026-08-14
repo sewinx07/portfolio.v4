@@ -580,7 +580,7 @@ export default function ProjectsSection() {
           ))
       smoothScrollProgress += (scrollProgress - smoothScrollProgress) * 0.1
 
-      el.style.setProperty('--scroll-progress', String(smoothScrollProgress))
+      el.style.setProperty('--scroll-progress', String(scrollProgress))
 
       viewAll.classList.toggle('is-visible', smoothScrollProgress > 0.85)
 
