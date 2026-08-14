@@ -51,7 +51,7 @@ export default function HeroSection() {
             className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug"
             style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.5rem)' }}
           >
-            a web developer, graphic designer &amp; video editor driven by crafting striking digital experiences
+            a engineering student, web developer, graphic designer &amp; video editor driven by crafting striking digital experiences
           </p>
         </FadeIn>
         <FadeIn delay={0.5} y={20}>
