@@ -1,31 +1,42 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
+const projectImages = import.meta.glob('../assets/projects/*.{png,jpg,jpeg}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>
+
+const byName: Record<string, string> = {}
+for (const [path, url] of Object.entries(projectImages)) {
+  byName[path.split('/').pop() as string] = url
+}
+
 const row1Images = [
-  'src/assets/projects/1.png',
-  'src/assets/projects/2.png',
-  'src/assets/projects/3.png',
-  'src/assets/projects/4.png',
-  'src/assets/projects/5.png',
-  'src/assets/projects/6.png',
-  'src/assets/projects/7.png',
-  'src/assets/projects/8.png',
-  'src/assets/projects/9.png',
-  'src/assets/projects/10.png',
-  'src/assets/projects/11.png',
-]
+  '1.png',
+  '2.png',
+  '3.png',
+  '4.png',
+  '5.png',
+  '6.png',
+  '7.png',
+  '8.png',
+  '9.png',
+  '10.png',
+  '11.png',
+].map((n) => byName[n])
 
 const row2Images = [
-  'src/assets/projects/11.png',
-  'src/assets/projects/10.png',
-  'src/assets/projects/9.png',
-  'src/assets/projects/8.png',
-  'src/assets/projects/7.png',
-  'src/assets/projects/6.png',
-  'src/assets/projects/5.png',
-  'src/assets/projects/4.png',
-  'src/assets/projects/3.png',
-  'src/assets/projects/2.png',
-]
+  '11.png',
+  '10.png',
+  '9.png',
+  '8.png',
+  '7.png',
+  '6.png',
+  '5.png',
+  '4.png',
+  '3.png',
+  '2.png',
+].map((n) => byName[n])
 
 function MarqueeRow({
   images,

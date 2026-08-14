@@ -2,6 +2,12 @@ import FadeIn from './FadeIn'
 import Magnet from './Magnet'
 import ContactButton from './ContactButton'
 
+const faceImage = (import.meta.glob('../assets/face.png', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>)['../assets/face.png']
+
 const navLinks = [
   { label: 'About', href: '#about' },
   { label: 'Price', href: '#price' },
@@ -63,7 +69,7 @@ export default function HeroSection() {
         <Magnet padding={150} strength={3} rotateStrength={25}>
           <div className="relative">
             <img
-              src="src/assets/face.png"
+              src={faceImage}
               alt="Taha portrait"
               className="w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] animate-[float_4s_ease-in-out_infinite]"
               loading="lazy"
