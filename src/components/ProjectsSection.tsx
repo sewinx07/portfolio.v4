@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SlowMo } from 'gsap/EasePack'
@@ -83,13 +83,10 @@ type Point = { x: number; y: number; dx: number; dy: number; m: number; flowX: n
 
 export default function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [err, setErr] = useState<string | null>(null)
-  const [status, setStatus] = useState('mounting')
 
   useEffect(() => {
-    try {
-      const el = sectionRef.current
-      if (!el) return
+    const el = sectionRef.current
+    if (!el) return
 
     const container = el.querySelector<HTMLElement>('.js-container') as HTMLElement
     const ruler = el.querySelector<HTMLElement>('.js-ruler') as HTMLElement
@@ -633,12 +630,6 @@ export default function ProjectsSection() {
     resizeHandler = onResize
     window.addEventListener('resize', onResize)
 
-    setStatus(
-      `ok | works=${worksEl.length} letters=${letters.length} maskD=${mask.pathOuter
-        .getAttribute('d')
-        ?.slice(0, 40)} maskW=${mask.width}x${mask.height} vh=${window.innerHeight}`
-    )
-
     return () => {
       isPaused = true
       cancelAnimationFrame(rafId)
@@ -655,10 +646,6 @@ export default function ProjectsSection() {
       el.style.removeProperty('--height')
       el.style.removeProperty('--scroll-progress')
       viewAll.classList.remove('is-visible')
-    }
-    } catch (e) {
-      setErr(String(e))
-      setStatus('error')
     }
   }, [])
   return (
@@ -723,50 +710,6 @@ export default function ProjectsSection() {
       <div className="s__viewall js-viewall">
         <Link to="/projects">View All Projects</Link>
       </div>
-
-      {(status.startsWith('error') || status === 'mounting') && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            zIndex: 9999,
-            background: status.startsWith('error')
-              ? 'rgba(255,0,0,0.9)'
-              : 'rgba(0,0,0,0.8)',
-            color: '#fff',
-            fontFamily: 'monospace',
-            fontSize: 12,
-            padding: 12,
-            maxWidth: '80vw',
-            maxHeight: 200,
-            overflow: 'auto',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          {status === 'mounting' ? 'WORK INIT...' : `WORK INIT ERROR:\n${err}`}
-        </div>
-      )}
-
-      {status.startsWith('ok') && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            zIndex: 9999,
-            background: 'rgba(0,0,0,0.75)',
-            color: '#fff',
-            fontFamily: 'monospace',
-            fontSize: 12,
-            padding: 8,
-            maxWidth: '90vw',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          {status}
-        </div>
-      )}
     </section>
   )
 }
