@@ -4,40 +4,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SlowMo } from 'gsap/EasePack'
 import { Link } from 'react-router-dom'
 import './work-section.css'
+import { useProjects } from '../store/projects'
 
 gsap.registerPlugin(ScrollTrigger, SlowMo)
-
-type Work = {
-  caption: string
-  site: string
-  src: string
-}
-
-const images = import.meta.glob('../assets/projects/*.{png,jpg,jpeg}', {
-  eager: true,
-  query: '?url',
-  import: 'default',
-}) as Record<string, string>
-
-const imageMap: Record<string, string> = {}
-for (const [path, url] of Object.entries(images)) {
-  const name = path.split('/').pop() as string
-  imageMap[name] = url
-}
-
-const works: Work[] = [
-  { caption: 'Nova Dashboard', site: 'https://github.com/sewinx07', src: imageMap['1.png'] },
-  { caption: 'Bloom Brand Identity', site: 'https://github.com/sewinx07', src: imageMap['2.png'] },
-  { caption: 'Vertex Media Reel', site: 'https://github.com/sewinx07', src: imageMap['3.png'] },
-  { caption: 'Flux E-Commerce', site: 'https://github.com/sewinx07', src: imageMap['4.png'] },
-  { caption: 'Prism Visual Kit', site: 'https://github.com/sewinx07', src: imageMap['5.png'] },
-  { caption: 'Pulse Promo', site: 'https://github.com/sewinx07', src: imageMap['6.png'] },
-  { caption: 'Neon Brand System', site: 'https://github.com/sewinx07', src: imageMap['7.png'] },
-  { caption: 'Orbit App Design', site: 'https://github.com/sewinx07', src: imageMap['8.png'] },
-  { caption: 'Drift Motion Reel', site: 'https://github.com/sewinx07', src: imageMap['9.png'] },
-  { caption: 'Echo Web Platform', site: 'https://github.com/sewinx07', src: imageMap['10.png'] },
-  { caption: 'Vibe Social Campaign', site: 'https://github.com/sewinx07', src: imageMap['11.png'] },
-]
 
 function workKey(index: number, total: number) {
   const key = Math.random().toString(36).slice(2, 6)
@@ -83,6 +52,7 @@ type Point = { x: number; y: number; dx: number; dy: number; m: number; flowX: n
 
 export default function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null)
+  const projects = useProjects()
 
   useEffect(() => {
     const el = sectionRef.current
@@ -521,7 +491,7 @@ export default function ProjectsSection() {
       letters.forEach((letter) => {
         const letterSpeed = speed * letter.freq
         letter.ghosts.forEach((ghost, index) => {
-          let progress =
+          const progress =
             (((progressState.animationProgress % letterSpeed) / letterSpeed +
               index / letter.total) %
               1) /
@@ -647,7 +617,7 @@ export default function ProjectsSection() {
       el.style.removeProperty('--scroll-progress')
       viewAll.classList.remove('is-visible')
     }
-  }, [])
+  }, [projects])
   return (
     <section id="work" className="s-work" ref={sectionRef}>
       <div className="s__outer">
@@ -663,28 +633,28 @@ export default function ProjectsSection() {
           </h2>
 
           <div className="s__scene js-scene">
-            {works.map((work, index) => (
+            {projects.map((project, index) => (
               <div
-                key={index}
+                key={project.id}
                 className="s__scene__work s__scene__work--video js-work"
               >
                 <div className="a__inner">
-                  <a href={work.site} target="_blank" rel="noopener noreferrer">
+                  <Link to={`/projects/${project.id}`}>
                     <img
                       className="a__video js-video"
-                      src={work.src}
-                      alt={work.caption}
+                      src={project.images[0]}
+                      alt={project.title}
                       loading="lazy"
                       width="1082"
                       height="636"
                     />
                     <div className="a__caption">
-                      <div className="a__caption__text">{work.caption}</div>
+                      <div className="a__caption__text">{project.title}</div>
                       <div className="a__caption__key">
-                        #{workKey(index, works.length)}
+                        #{workKey(index, projects.length)}
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}
