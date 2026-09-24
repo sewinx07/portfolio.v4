@@ -5,6 +5,7 @@ import { SlowMo } from 'gsap/EasePack'
 import { Link } from 'react-router-dom'
 import './work-section.css'
 import { useProjects } from '../store/projects'
+import { useContent } from '../store/content'
 
 gsap.registerPlugin(ScrollTrigger, SlowMo)
 
@@ -53,6 +54,7 @@ type Point = { x: number; y: number; dx: number; dy: number; m: number; flowX: n
 export default function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const projects = useProjects()
+  const content = useContent()
 
   useEffect(() => {
     const el = sectionRef.current
@@ -617,7 +619,7 @@ export default function ProjectsSection() {
       el.style.removeProperty('--scroll-progress')
       viewAll.classList.remove('is-visible')
     }
-  }, [projects])
+  }, [projects, content.work.title])
   return (
     <section id="work" className="s-work" ref={sectionRef}>
       <div className="s__outer">
@@ -625,10 +627,11 @@ export default function ProjectsSection() {
           <div className="s__inner js-container">
           <h2 className="s__title">
             <span className="s__title__inner js-title">
-              <span className="s__title__letter js-letter">W</span>
-              <span className="s__title__letter js-letter">O</span>
-              <span className="s__title__letter js-letter">R</span>
-              <span className="s__title__letter js-letter">K</span>
+              {Array.from(content.work.title).map((char, i) => (
+                <span key={i} className="s__title__letter js-letter">
+                  {char === ' ' ? '\u00A0' : char}
+                </span>
+              ))}
             </span>
           </h2>
 
@@ -678,7 +681,7 @@ export default function ProjectsSection() {
       </div>
 
       <div className="s__viewall js-viewall">
-        <Link to="/projects">View All Projects</Link>
+        <Link to="/projects">{content.work.viewAllLabel}</Link>
       </div>
     </section>
   )

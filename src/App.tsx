@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import HeroSection from './components/HeroSection'
 import MarqueeSection from './components/MarqueeSection'
@@ -10,17 +11,25 @@ import AllProjectsPage from './components/AllProjectsPage'
 import ProjectDetailPage from './components/ProjectDetailPage'
 import AdminPage from './components/AdminPage'
 import NotFoundPage from './components/NotFoundPage'
+import { useContent } from './store/content'
 
 function HomePage() {
+  const content = useContent()
+  const s = content.sectionIds
+
+  useEffect(() => {
+    document.title = content.siteTitle
+  }, [content.siteTitle])
+
   return (
     <div style={{ overflowX: 'clip' }}>
-      <HeroSection />
-      <MarqueeSection />
-      <AboutSection />
-      <ServicesSection />
-      <PriceSection />
-      <ProjectsSection />
-      <ContactSection />
+      {s.hero && <HeroSection />}
+      {s.marquee && <MarqueeSection />}
+      {s.about && <AboutSection />}
+      {s.services && <ServicesSection />}
+      {s.price && <PriceSection />}
+      {s.work && <ProjectsSection />}
+      {s.contact && <ContactSection />}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import FadeIn from './FadeIn'
 import ContactButton from './ContactButton'
+import { useContent } from '../store/content'
 
 interface FormState {
   name: string
@@ -17,6 +18,8 @@ interface FormErrors {
 }
 
 export default function ContactSection() {
+  const content = useContent()
+  const c = content.contact
   const [form, setForm] = useState<FormState>({ name: '', email: '', subject: '', message: '' })
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitted, setSubmitted] = useState(false)
@@ -37,7 +40,7 @@ export default function ContactSection() {
     setErrors(errs)
     if (Object.keys(errs).length > 0) return
 
-    const mailto = `mailto:Tahagmir13@gmail.com?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)}`
+    const mailto = `mailto:${c.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)}`
     window.open(mailto, '_blank')
     setSubmitted(true)
     setForm({ name: '', email: '', subject: '', message: '' })
@@ -56,7 +59,7 @@ export default function ContactSection() {
           className="hero-heading font-black uppercase text-center mb-6 leading-none tracking-tight"
           style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
         >
-          Contact
+          {c.heading}
         </h2>
       </FadeIn>
 
@@ -65,7 +68,7 @@ export default function ContactSection() {
           className="text-[#D7E2EA] font-light text-center mx-auto mb-16 sm:mb-20"
           style={{ fontSize: 'clamp(0.9rem, 1.6vw, 1.25rem)', maxWidth: '520px' }}
         >
-          Have a project in mind? Let&apos;s bring your vision to life. Reach out and I&apos;ll get back to you within 24 hours.
+          {c.intro}
         </p>
       </FadeIn>
 
@@ -74,7 +77,7 @@ export default function ContactSection() {
           {submitted && (
             <div className="text-center mb-8 sm:mb-10">
               <p className="text-[#B600A8] font-medium uppercase tracking-wider text-sm sm:text-base">
-                Message sent! Your email client has been opened.
+                {c.successMessage}
               </p>
             </div>
           )}
@@ -83,7 +86,7 @@ export default function ContactSection() {
               <div>
                 <input
                   type="text"
-                  placeholder="Your Name"
+                  placeholder={c.placeholders.name}
                   value={form.name}
                   onChange={(e) => updateField('name', e.target.value)}
                   className={`w-full bg-transparent border-2 rounded-full px-6 py-3.5 sm:py-4 text-[#D7E2EA] text-sm sm:text-base font-light placeholder-[#D7E2EA]/40 outline-none transition-colors duration-200 ${errors.name ? 'border-red-500/60 focus:border-red-500' : 'border-[#D7E2EA]/20 focus:border-[#B600A8]/50'}`}
@@ -93,7 +96,7 @@ export default function ContactSection() {
               <div>
                 <input
                   type="email"
-                  placeholder="Your Email"
+                  placeholder={c.placeholders.email}
                   value={form.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   className={`w-full bg-transparent border-2 rounded-full px-6 py-3.5 sm:py-4 text-[#D7E2EA] text-sm sm:text-base font-light placeholder-[#D7E2EA]/40 outline-none transition-colors duration-200 ${errors.email ? 'border-red-500/60 focus:border-red-500' : 'border-[#D7E2EA]/20 focus:border-[#B600A8]/50'}`}
@@ -104,7 +107,7 @@ export default function ContactSection() {
             <div>
               <input
                 type="text"
-                placeholder="Subject"
+                placeholder={c.placeholders.subject}
                 value={form.subject}
                 onChange={(e) => updateField('subject', e.target.value)}
                 className={`w-full bg-transparent border-2 rounded-full px-6 py-3.5 sm:py-4 text-[#D7E2EA] text-sm sm:text-base font-light placeholder-[#D7E2EA]/40 outline-none transition-colors duration-200 ${errors.subject ? 'border-red-500/60 focus:border-red-500' : 'border-[#D7E2EA]/20 focus:border-[#B600A8]/50'}`}
@@ -114,7 +117,7 @@ export default function ContactSection() {
             <div>
               <textarea
                 rows={5}
-                placeholder="Your Message"
+                placeholder={c.placeholders.message}
                 value={form.message}
                 onChange={(e) => updateField('message', e.target.value)}
                 className={`w-full bg-transparent border-2 rounded-[30px] px-6 py-4 sm:py-5 text-[#D7E2EA] text-sm sm:text-base font-light placeholder-[#D7E2EA]/40 outline-none transition-colors duration-200 resize-none ${errors.message ? 'border-red-500/60 focus:border-red-500' : 'border-[#D7E2EA]/20 focus:border-[#B600A8]/50'}`}
@@ -134,18 +137,24 @@ export default function ContactSection() {
         <div className="flex flex-wrap justify-center gap-8 sm:gap-12 md:gap-16">
           <div className="text-center">
             <p className="text-[#D7E2EA]/40 text-xs sm:text-sm font-medium uppercase tracking-widest mb-2">Email</p>
-            <p className="text-[#D7E2EA] font-light text-sm sm:text-base">Tahagmir13@gmail.com</p>
+            <p className="text-[#D7E2EA] font-light text-sm sm:text-base">{c.email}</p>
           </div>
           <div className="text-center">
             <p className="text-[#D7E2EA]/40 text-xs sm:text-sm font-medium uppercase tracking-widest mb-2">Location</p>
-            <p className="text-[#D7E2EA] font-light text-sm sm:text-base">Gabes, Tunisia</p>
+            <p className="text-[#D7E2EA] font-light text-sm sm:text-base">{c.location}</p>
           </div>
           <div className="text-center">
             <p className="text-[#D7E2EA]/40 text-xs sm:text-sm font-medium uppercase tracking-widest mb-2">Social</p>
             <div className="flex gap-4 justify-center">
-              <a href="https://www.instagram.com/sewinx.zip/" className="text-[#D7E2EA] font-light text-sm sm:text-base hover:text-[#B600A8] transition-colors duration-200">Instagram</a>
-              <a href="https://github.com/sewinx07" className="text-[#D7E2EA] font-light text-sm sm:text-base hover:text-[#B600A8] transition-colors duration-200">GitHub</a>
-              <a href="https://www.linkedin.com/in/taha-gmir-018026218/" className="text-[#D7E2EA] font-light text-sm sm:text-base hover:text-[#B600A8] transition-colors duration-200">LinkedIn</a>
+              {c.socials.map((social) => (
+                <a
+                  key={social.id}
+                  href={social.url}
+                  className="text-[#D7E2EA] font-light text-sm sm:text-base hover:text-[#B600A8] transition-colors duration-200"
+                >
+                  {social.label}
+                </a>
+              ))}
             </div>
           </div>
         </div>

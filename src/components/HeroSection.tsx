@@ -1,6 +1,7 @@
 import FadeIn from './FadeIn'
 import Magnet from './Magnet'
 import ContactButton from './ContactButton'
+import { useContent } from '../store/content'
 
 const faceImage = (import.meta.glob('../assets/face.png', {
   eager: true,
@@ -8,14 +9,10 @@ const faceImage = (import.meta.glob('../assets/face.png', {
   import: 'default',
 }) as Record<string, string>)['../assets/face.png']
 
-const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Price', href: '#price' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact', href: '#contact' },
-]
-
 export default function HeroSection() {
+  const content = useContent()
+  const navLinks = content.hero.navLinks
+
   const scrollTo = (href: string) => {
     const id = href.replace('#', '')
     const el = document.getElementById(id)
@@ -27,7 +24,7 @@ export default function HeroSection() {
       <FadeIn as="nav" delay={0} y={-20} className="flex justify-between items-center px-6 md:px-10 pt-6 md:pt-8">
         {navLinks.map((link) => (
           <a
-            key={link.label}
+            key={link.id}
             href={link.href}
             onClick={(e) => { e.preventDefault(); scrollTo(link.href) }}
             className="text-[#D7E2EA] font-medium uppercase tracking-wider text-sm md:text-lg lg:text-[1.4rem] transition-opacity duration-200 hover:opacity-70 cursor-pointer"
@@ -40,7 +37,7 @@ export default function HeroSection() {
       <div className="flex-1 flex flex-col justify-center overflow-hidden">
         <FadeIn delay={0.15} y={40}>
           <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-[14vw] sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw] mt-6 sm:mt-4 md:-mt-5">
-            Hi, i&apos;m taha
+            {content.hero.heading}
           </h1>
         </FadeIn>
       </div>
@@ -51,7 +48,7 @@ export default function HeroSection() {
             className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug"
             style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.5rem)' }}
           >
-            a engineering student, web developer, graphic designer &amp; video editor driven by crafting striking digital experiences
+            {content.hero.subtitle}
           </p>
         </FadeIn>
         <FadeIn delay={0.5} y={20}>

@@ -1,4 +1,7 @@
+import { useContent } from '../store/content'
+
 export default function ContactButton({ className }: { className?: string }) {
+  const content = useContent()
   return (
     <button
       className={`px-8 py-3 sm:px-10 sm:py-3.5 md:px-12 md:py-4 rounded-full text-white font-medium uppercase tracking-widest text-xs sm:text-sm md:text-base ${className || ''}`}
@@ -9,7 +12,7 @@ export default function ContactButton({ className }: { className?: string }) {
         outlineOffset: '-3px',
       }}
     >
-      Contact Me
+      {content.global.contactButtonLabel}
     </button>
   )
 }

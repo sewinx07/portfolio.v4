@@ -1,49 +1,10 @@
 import FadeIn from './FadeIn'
-
-const plans = [
-  {
-    name: 'Starter',
-    price: '',
-    desc: 'Perfect for small projects and personal brands looking to make an impact.',
-    features: [
-      'Single-page website or brand kit',
-      'Basic UI/UX design',
-      '1 revision round',
-      'PNG/SVG/PDF delivery',
-      '3 business day turnaround',
-    ],
-  },
-  {
-    name: 'Professional',
-    price: '',
-    desc: 'Ideal for businesses and agencies needing a full digital presence.',
-    features: [
-      'Multi-page website or full brand identity',
-      'Advanced UI/UX & responsive design',
-      '3 revision rounds',
-      'Source files & assets included',
-      '30-second video edit or motion reel',
-      '5 business day turnaround',
-    ],
-    popular: true,
-  },
-  {
-    name: 'Enterprise',
-    price: '',
-    desc: 'Comprehensive solution for large-scale projects and ongoing partnerships.',
-    features: [
-      'Custom web app or complete brand system',
-      'Premium UI/UX with user testing',
-      'Unlimited revisions',
-      'Full video production & motion graphics',
-      'SEO & performance optimization',
-      'Priority support',
-      'Custom timeline',
-    ],
-  },
-]
+import { useContent } from '../store/content'
 
 export default function PriceSection() {
+  const content = useContent()
+  const plans = content.plans.items
+
   const scrollToContact = () => {
     const el = document.getElementById('contact')
     if (el) el.scrollIntoView({ behavior: 'smooth' })
@@ -56,13 +17,13 @@ export default function PriceSection() {
           className="hero-heading font-black uppercase text-center mb-16 sm:mb-20 md:mb-24 leading-none tracking-tight"
           style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
         >
-          Price
+          {content.plans.heading}
         </h2>
       </FadeIn>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {plans.map((plan, i) => (
-          <FadeIn key={plan.name} delay={i * 0.1} y={30}>
+          <FadeIn key={plan.id} delay={i * 0.1} y={30}>
             <div
               className={`rounded-[30px] sm:rounded-[40px] border-2 p-6 sm:p-8 flex flex-col h-full ${
                 plan.popular
@@ -87,7 +48,7 @@ export default function PriceSection() {
                 </span>
               </div>
               <p className="text-[#D7E2EA]/60 font-light text-sm sm:text-base leading-relaxed mb-6">
-                {plan.desc}
+                {plan.description}
               </p>
 
               <ul className="flex flex-col gap-3 mb-8 flex-1">
@@ -115,7 +76,7 @@ export default function PriceSection() {
                     : undefined
                 }
               >
-                Get Started
+                {content.plans.buttonLabel}
               </button>
             </div>
           </FadeIn>
